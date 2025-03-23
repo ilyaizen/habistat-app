@@ -1,0 +1,34 @@
+---
+description: Tech-Stack
+globs: 
+alwaysApply: false
+---
+# Tech-Stack
+
+Here’s a concise summary of Habistat's tech stack, designed for a cross-platform, offline-first habit tracker with real-time syncing and optional OAuth sign-up that will be implemented at a later stage. The table below includes the technologies used:
+
+| **Component**           | **Technology**                              | **Description**                                                                            |
+| ----------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| **Package Manager**     | @Bun v1.2                 | Fast package manager and runtime for managing dependencies.                                |
+| **Meta-Framework**      | @Tauri v2              | Builds native desktop (Windows, macOS, Linux) and mobile (Android) apps from web code.     |
+| **Front-end Framework** | @Next.js v15.2        | React framework for web apps with server-side rendering and static exports for Tauri.      |
+| **Local Storage**       | @Dexie.js v4           | IndexedDB wrapper for offline data persistence in browser and Tauri apps.                  |
+| **Back-end**            | @Supabase           | PostgreSQL database with authentication (including OAuth) and real-time WebSocket updates. |
+| **Styling**             | @Tailwind CSS v4 | Utility-first CSS framework for fast, consistent UI development.                           |
+| **UI Components**       | @shadcn/ui v2.3    | Customizable, accessible React components built with Radix UI and Tailwind CSS.            |
+
+This tech stack ensures a seamless, efficient experience across platforms, with robust offline capabilities and simplified backend management.
+
+## Potential Additional Libraries
+
+Based on the initial requirements, the following libraries might be necessary:
+
+| **Library**                              | **Potential Need**                                                                                 | **Reasoning**                                                                                                                                                                                   |
+| :--------------------------------------- | :------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`uuid`**                               | Generating unique IDs for anonymous sessions and potentially habit entries locally before syncing. | Ensures unique identification of resources created offline without conflicts.                                                                                                                   |
+| **`date-fns`**                           | Reliable date/time manipulation and formatting.                                                    | Crucial for handling daily tracking logic, calculating date ranges (e.g., last 90 days), formatting display dates, and managing timezones reliably.                                             |
+| **`zustand`**                            | Global state management.                                                                           | May be needed to manage application-wide state like online/offline status, current user session (anonymous or authenticated), and potentially cached data, especially as complexity grows.      |
+| **`@tanstack/react-query`** (or similar) | Data fetching, caching, and synchronization management.                                            | Can simplify server state management, handling loading/error states, caching Supabase data, and potentially managing background sync logic. Integrates well with offline patterns.              |
+| **`@tauri-apps/api`**                    | Accessing native Tauri features.                                                                   | Essential for interacting with the Tauri backend, such as checking network status reliably (`@tauri-apps/api/network`), accessing file system (if needed later), or using native notifications. |
+
+_These will be added via Bun (`bun add <package>`) if and when their necessity is confirmed during development._

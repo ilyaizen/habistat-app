@@ -1,0 +1,129 @@
+---
+description: Implementation Plan
+globs: 
+alwaysApply: false
+---
+# Habistat: Implementation Plan
+
+This plan is a draft and is continuously changing. (Last update: 2025-03-27)
+
+**Objective:** Develop "Habistat," a cross-platform, offline-first habit tracking application with real-time synchronization (when online), optional sign-up, and OAuth capabilities, leveraging the specified modern tech stack.
+
+## Core Technology Stack
+
+[tech-stack.mdc](mdc:.cursor/rules/tech-stack.mdc)
+
+## Phase 1: Core Uptime Tracking & Offline-First Foundation
+
+This phase focuses on setting up the project and implementing the initial "Uptime" tracking feature with core offline capabilities and anonymous sessions.
+
+**Goals:**
+
+- [x] Establish the project structure and core dependencies.
+- [x] Implement the basic Anonymous User session flow (start, local storage).
+- [x] Monitor daily app usage ("Uptime") locally.
+- [x] Visualize the last 90 days of Uptime.
+- [x] Implement basic online/offline detection and status display.
+- [ ] **(Deferred)** Prepare groundwork for cloud sync (Supabase integration).
+
+**Steps:**
+
+1. **Project Initialization:**
+
+   - [x] Set up a new project using Bun.
+   - [x] Initialize Next.js with TypeScript and Tailwind CSS.
+   - [x] Integrate Tauri v2, configuring it for Next.js static export (`next build && next export`).
+   - [x] Install and configure `shadcn/ui`.
+   - [x] Install `Dexie.js`, `uuid`, `date-fns`, and `@tauri-apps/api`.
+
+2. **Homepage Implementation (`app/[locale]/page.tsx`):**
+
+   - [ ] Create a simple page centered vertically and horizontally.
+   - [ ] Display "Habistat" title (large, bold).
+   - [ ] Add a "Start Tracking" button (`<Button>` from shadcn/ui).
+
+3. **Anonymous Session Management:**
+
+   - [ ] **On "Start Tracking" click:**
+     - [ ] Check if an anonymous session ID exists in local storage (Dexie.js).
+     - [ ] If not, generate a new `uuid` v4 for `anonymousUserId`.
+     - [ ] Store `anonymousUserId` and `sessionCreatedAt` timestamp locally using Dexie.js.
+     - [ ] Record the current date as the first "active" day (see Step 5).
+     - [ ] Navigate the user to the Dashboard page.
+   - [ ] **Session Persistence:** The app should check for the `anonymousUserId` on launch to determine if a session exists.
+   - [ ] **(Deferred)** Implement 30-day inactivity expiry logic later (requires tracking last active date).
+
+4. **Dashboard Page (`app/[locale]/dashboard/page.tsx`):**
+
+   - [ ] Create the basic Dashboard layout.
+   - [ ] **Header:** Include a component to display the current online/offline status (see Step 7).
+   - [ ] **Main Content:** Add a placeholder section for the Uptime visualization.
+
+5. **Daily Usage Tracking (Local):**
+
+   - [ ] **Define "Usage":** Determine what constitutes "daily usage" (e.g., app launch detected via Tauri event or a specific interaction).
+   - [ ] **Data Model (Dexie.js):** Create a Dexie table (e.g., `dailyActivity`) with fields like `id` (auto-incrementing), `userId` (the `anonymousUserId`), `date` (ISO string YYYY-MM-DD), `isActive` (boolean). Use indexing on `userId` and `date`.
+   - [ ] **Logging Logic:** Implement logic (e.g., in a global layout or effect hook) that checks on app start/interaction if activity for the current date (`using date-fns`) and `anonymousUserId` has already been logged. If not, add a record `{ userId: anonymousUserId, date: currentDate, isActive: true }` to Dexie.
+
+6. **Uptime Visualization Component:**
+
+   - [ ] Create a React component (e.g., `UptimeChart`).
+   - [ ] **Data Fetching:** Use Dexie.js to query the `dailyActivity` table for the current `anonymousUserId` for the last 90 days relative to the current date (`date-fns` needed here). Also need `sessionCreatedAt` to determine "Gray" days.
+   - [ ] **Rendering:**
+     - [ ] Generate an array representing the last 90 days.
+     - [ ] For each day:
+       - [ ] If before `sessionCreatedAt`, render a **Gray** rectangle.
+       - [ ] If after `sessionCreatedAt` and an `isActive: true` record exists for that date, render a **Green** rectangle.
+       - [ ] If after `sessionCreatedAt` and no record exists (or `isActive: false`), render a **Red** rectangle.
+     - [ ] Use Flexbox/Grid with Tailwind CSS to display these rectangles vertically or horizontally as desired.
+   - [ ] Integrate this component into the Dashboard page.
+
+7. **Online/Offline Detection & Status:**
+
+   - [ ] Use `@tauri-apps/api/event` to listen for Tauri's network status change events or directly use `@tauri-apps/api/network`. Alternatively, use `navigator.onLine` and `online`/`offline` window events as a fallback (less reliable within Tauri).
+   - [ ] Store the current status in a simple state (e.g., React `useState` or a global state manager like Zustand).
+   - [ ] Display the status clearly in the Dashboard header (e.g., "Status: Online" / "Status: Offline").
+
+8. **Basic Supabase Sync (Uplink Preparation):**
+
+   - [ ] Set up a Supabase project.
+   - [ ] Define a PostgreSQL table (e.g., `user_daily_activity`) mirroring the Dexie structure, adding columns like `supabase_user_id` (nullable initially) and `anonymous_user_id`. Add appropriate RLS policies.
+   - [ ] **Sync Trigger:** When the app detects it's online (transition from offline to online, or on app start if online):
+     - [ ] Query Dexie.js for any `dailyActivity` records that haven't been synced yet (requires adding a `syncedAt` timestamp or a `needsSync` flag to the Dexie table).
+     - [ ] **API Call:** Send these records to a Supabase Edge Function (or use `supabase-js` client directly if appropriate security/RLS is in place) to `upsert` them into the `user_daily_activity` table, associating them with the `anonymous_user_id`.
+     - [ ] Update the local records in Dexie to mark them as synced.
+   - [ ] **Note:** This initial sync is primarily _uploading_ local data. Real-time _download_ and conflict resolution will be addressed in a subsequent phase after authentication is implemented.
+
+9. **Session Claiming (Conceptual Design):**
+   - [ ] Outline the future flow: User signs up/logs in via Supabase Auth. A mechanism (e.g., a button "Claim Anonymous Data") allows linking the current `anonymousUserId` (from Dexie) to their authenticated `supabase_user_id`.
+   - [ ] This typically involves calling a Supabase Edge Function that updates the backend records, associating the previously anonymous data with the authenticated user ID. Data merging might be needed if the user used the app anonymously on multiple devices.
+
+## Phase 2: Authentication & Full Synchronization
+
+- [ ] Implement Supabase Authentication (Email/Password, OAuth providers like Google/GitHub).
+- [ ] Implement the "Session Claiming" feature designed in Phase 1.
+- [ ] Enhance sync logic for bi-directional updates (downloading data from Supabase if newer).
+- [ ] Implement basic conflict resolution (e.g., "last write wins" or more sophisticated strategies).
+- [ ] Ensure data consistency across devices for logged-in users.
+
+## Phase 3: Core Habit Tracking Features
+
+- [ ] Develop UI/UX for habit creation (name, frequency, goals, reminders).
+- [ ] Implement logic for tracking habit completion.
+- [ ] Store habit definitions and completion data locally (Dexie) and sync with Supabase.
+- [ ] Implement streak tracking logic and UI indicators.
+- [ ] Develop daily, weekly, monthly views of habits and progress.
+- [ ] Add milestone celebrations/visual feedback.
+
+## Phase 4: Enhancements & Polish
+
+- [ ] Implement detailed statistics and progress graphs.
+- [ ] Add support for habit categories and tags.
+- [ ] Integrate with native calendars or notifications (via Tauri).
+- [ ] Refine data visualization for patterns and trends.
+- [ ] Ensure responsive design across different screen sizes (desktop/potential mobile).
+- [ ] Implement data export and backup functionality.
+- [ ] Consider gamification elements (achievements, rewards).
+- [ ] Thorough testing, performance optimization, and bug fixing.
+
+This revised plan provides a more granular breakdown of the initial phase, anticipates library needs, and sets a clearer path forward. Remember to adapt it as development progresses and new challenges or insights emerge.

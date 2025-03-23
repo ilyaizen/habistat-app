@@ -1,0 +1,120 @@
+{
+  "app": {
+    "name": "Habistat",
+    "description": "A daily streak habit uptime tracker calendar"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "app": {
+      "name": "Habistat"
+    }
+  },
+  "home": {
+    "title": "Welcome to Habistat",
+    "subtitle": "Track your daily app usage and build better habits",
+    "goToStart": "Get Started",
+    "learnMore": "Learn More",
+    "hero": {
+      "title": "Track Your Habits, Transform Your Life",
+      "subtitle": "A simple, visual way to build and maintain positive habits",
+      "features": {
+        "visualTracking": {
+          "title": "Visual Progress Tracking",
+          "description": {
+            "part1": "See your progress at a glance with our",
+            "part2": "daily tracking grid"
+          }
+        },
+        "multiHabit": {
+          "title": "Multiple Habit Support",
+          "description": "Track multiple habits simultaneously with ease"
+        },
+        "yearlyGrid": {
+          "title": "Yearly Overview",
+          "description": "View your entire year's progress in one beautiful grid"
+        },
+        "timedTasks": {
+          "title": "Timed Tasks",
+          "description": "Set time-based goals and track your progress"
+        }
+      },
+      "motivation": "Every day is a new opportunity to build better habits"
+    }
+  },
+  "about": {
+    "title": "About Habistat",
+    "subtitle": "Your personal habit tracking assistant",
+    "story": {
+      "title": "What is Habistat?",
+      "content": "Habistat is a daily streak habit uptime tracker calendar designed to help you build and maintain consistent habits. It provides visual tracking and statistics to help you stay motivated and achieve your goals."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "content": "Our mission is to help you build better habits through visual tracking, streak counting, and simple daily check-ins. We believe that consistency is the key to personal growth and success."
+    },
+    "team": {
+      "title": "Features",
+      "content": "Habistat includes habit tracking, streak counting, visual calendars, progress statistics, and customizable habit settings to help you maintain consistency in your daily routines."
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have questions about using Habistat?",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "send": "Send Message",
+      "required": "Required field"
+    },
+    "address": {
+      "title": "Address",
+      "line1": "123 Habit Street",
+      "line2": "Consistency City, HB 12345"
+    },
+    "email": "support@habistat.app",
+    "support": "Have questions? Write to us at"
+  },
+  "start": {
+    "title": "Get Started with Habistat",
+    "subtitle": "Start tracking your habits in three simple steps",
+    "step1": {
+      "title": "Create a Habit",
+      "description": "Define the habits you want to track and their frequency"
+    },
+    "step2": {
+      "title": "Daily Check-ins",
+      "description": "Mark your habits as complete each day to build your streak"
+    },
+    "step3": {
+      "title": "Track Progress",
+      "description": "Monitor your consistency and celebrate your achievements"
+    },
+    "cta": "Create New Habit",
+    "examples": {
+      "title": "Habit Ideas",
+      "productivity": "Daily Exercise",
+      "media": "Reading",
+      "chat": "Meditation",
+      "notes": "Journaling",
+      "dashboard": "Healthy Eating"
+    }
+  },
+  "footer": {
+    "about": "About",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "github": "GitHub",
+    "copyright": "Habistat",
+    "madeWith": "Made with",
+    "and": "and",
+    "by": "by",
+    "love": "Love",
+    "changeLanguage": "Change Language"
+  },
+  "Index": {
+    "title": "Hello World"
+  }
+}
