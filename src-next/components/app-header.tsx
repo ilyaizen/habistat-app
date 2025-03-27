@@ -57,7 +57,7 @@ export function AppHeader() {
   };
 
   return (
-    <header className="border-opacity-20 bg-opacity-70 supports-[backdrop-filter]:bg-opacity-70 border-b border-[--border] bg-[--background] supports-[backdrop-filter]:backdrop-blur">
+    <header className="border-opacity-20 bg-opacity-70 border-b border-[--border] bg-[--background]">
       <div className="container mx-auto px-3 md:px-4">
         <div className="relative flex h-14 items-center justify-between md:h-16">
           {/* Logo */}

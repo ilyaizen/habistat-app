@@ -56,7 +56,7 @@ export function AppFooter() {
   };
 
   return (
-    <footer className="border-opacity-20 bg-opacity-70 supports-[backdrop-filter]:bg-opacity-70 border-t border-[--border] bg-[--background] supports-[backdrop-filter]:backdrop-blur">
+    <footer className="border-opacity-20 bg-opacity-70 border-t border-[--border] bg-[--background]">
       <TooltipProvider delayDuration={200}>
         <div className="relative container mx-auto flex min-h-[4rem] flex-col items-center gap-4 px-3 py-4 md:h-16 md:flex-row md:justify-between md:gap-0 md:px-4 md:py-0">
           {/* Credits section with Cursor logo and author link */}

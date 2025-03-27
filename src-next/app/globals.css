@@ -251,32 +251,3 @@
 [dir="rtl"] {
   font-family: var(--font-sans) var(--font-noto-hebrew);
 }
-
-/* Backdrop blur utilities */
-.backdrop-blur-sm {
-  backdrop-filter: blur(var(--blur-sm));
-}
-
-.backdrop-blur {
-  backdrop-filter: blur(var(--blur-base));
-}
-
-.backdrop-blur-md {
-  backdrop-filter: blur(var(--blur-md));
-}
-
-.backdrop-blur-lg {
-  backdrop-filter: blur(var(--blur-lg));
-}
-
-.backdrop-blur-xl {
-  backdrop-filter: blur(var(--blur-xl));
-}
-
-.backdrop-blur-2xl {
-  backdrop-filter: blur(var(--blur-2xl));
-}
-
-.backdrop-blur-3xl {
-  backdrop-filter: blur(var(--blur-3xl));
-}
