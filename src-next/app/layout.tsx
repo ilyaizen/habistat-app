@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* GridBackground */}
         <div className="grid-background"></div>
         {/* Gradation Background */}
-        <div className="gradation-background"></div>
+        {/* <div className="gradation-background"></div> */}
         {children}
       </body>
     </html>
