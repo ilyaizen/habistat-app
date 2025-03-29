@@ -42,15 +42,15 @@ import {
  */
 
 export function AppHeader() {
-  const { session, endSession } = useSession();
+  const { session, deleteSession } = useSession();
   const router = useRouter();
 
   const t = useTranslations("nav");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showEndSessionAlert, setShowEndSessionAlert] = useState(false);
+  const [showDeleteSessionAlert, setShowDeleteSessionAlert] = useState(false);
 
-  const handleEndSession = () => {
-    endSession();
+  const handleDeleteSession = () => {
+    deleteSession();
     router.push("/");
   };
 
@@ -79,40 +79,6 @@ export function AppHeader() {
             </Link>
           </nav>
 
-          {/* Header */}
-          <div className="flex h-10 w-full items-center justify-between px-6 py-1.5">
-            <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback>A</AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm leading-none font-medium">Anonymous User</p>
-                      <p className="text-muted-foreground text-xs leading-none">
-                        Session ID: {session?.id.slice(0, 8)}
-                      </p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onSelect={(e) => {
-                      e.preventDefault();
-                      setShowEndSessionAlert(true);
-                    }}
-                  >
-                    <span>End Session</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-
           {/* Controls */}
           <div className="flex items-center gap-1.5 md:gap-2">
             <Button
@@ -125,6 +91,35 @@ export function AppHeader() {
               <span className="sr-only">Toggle menu</span>
             </Button>
             <ThemeToggle />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback>A</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm leading-none font-medium">Anonymous User</p>
+                    <p className="text-muted-foreground text-xs leading-none">Session ID: {session?.id.slice(0, 8)}</p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <span className="text-muted-foreground/50">Claim Session</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    setShowDeleteSessionAlert(true);
+                  }}
+                >
+                  <span>Delete Session</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
@@ -157,17 +152,17 @@ export function AppHeader() {
           </div>
         )}
 
-        <AlertDialog open={showEndSessionAlert} onOpenChange={setShowEndSessionAlert}>
+        <AlertDialog open={showDeleteSessionAlert} onOpenChange={setShowDeleteSessionAlert}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>End Session</AlertDialogTitle>
+              <AlertDialogTitle>Delete Session</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to end your current session? This action cannot be undone.
+                Are you sure you want to delete your current session? This action cannot be undone.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleEndSession}>End Session</AlertDialogAction>
+              <AlertDialogAction onClick={handleDeleteSession}>Delete Session</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

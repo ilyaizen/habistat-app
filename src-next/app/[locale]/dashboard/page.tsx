@@ -31,7 +31,7 @@ export default function DashboardPage() {
 
   return (
     <main className="container mx-auto max-w-4xl space-y-6 p-4">
-      <UptimeMonitor />
+      <UptimeMonitor session={session} />
     </main>
   );
 }

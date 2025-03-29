@@ -21,8 +21,7 @@ interface DayStatus {
 }
 
 interface UptimeMonitorProps {
-  session?: Session;
-  showSessionInfo?: boolean;
+  session: Session;
 }
 
 /**
@@ -31,10 +30,10 @@ interface UptimeMonitorProps {
  * Features:
  * - 90-day activity heatmap
  * - Session tracking
+ * - Detailed session information
  * - Session history display
- * - Detailed session information (optional)
  */
-export function UptimeMonitor({ session, showSessionInfo = false }: UptimeMonitorProps) {
+export function UptimeMonitor({ session }: UptimeMonitorProps) {
   // State for uptime heatmap
   const [days, setDays] = useState<DayStatus[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -180,10 +179,42 @@ export function UptimeMonitor({ session, showSessionInfo = false }: UptimeMonito
         </div>
       </Card>
 
-      {/* Session History */}
+      {/* Session Info - Moved before session history */}
+      <Card className="p-4">
+        <CardHeader>
+          <CardTitle>Session Information</CardTitle>
+          <CardDescription>Current session details and statistics</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <p className="text-muted-foreground">Session ID</p>
+              <p className="font-medium">{session.id}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Created</p>
+              <p className="font-medium">{formatDistanceToNow(session.createdAt)} ago</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Last Active</p>
+              <p className="font-medium">{formatDistanceToNow(session.lastActive)} ago</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Session Type</p>
+              <p className="font-medium">Anonymous</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">App Opens</p>
+              <p className="font-medium">{sessions.length}</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* App Opens History */}
       <Card>
         <CardHeader>
-          <CardTitle>App Session History</CardTitle>
+          <CardTitle>App Opens History</CardTitle>
           <CardDescription>
             Records of when you&apos;ve opened the app (5-minute cooldown between records)
           </CardDescription>
@@ -213,38 +244,6 @@ export function UptimeMonitor({ session, showSessionInfo = false }: UptimeMonito
           )}
         </CardContent>
       </Card>
-
-      {/* Session Info */}
-      {showSessionInfo && session && (
-        <Card className="p-4">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Session Information</h2>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <p className="text-muted-foreground">Session ID</p>
-              <p className="font-medium">{session.id}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Created</p>
-              <p className="font-medium">{formatDistanceToNow(session.createdAt)} ago</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Last Active</p>
-              <p className="font-medium">{formatDistanceToNow(session.lastActive)} ago</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">Session Type</p>
-              <p className="font-medium">Anonymous</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground">App Opens</p>
-              <p className="font-medium">{sessions.length}</p>
-            </div>
-          </div>
-        </Card>
-      )}
     </div>
   );
 }

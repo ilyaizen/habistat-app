@@ -1,6 +1,6 @@
 "use client";
 
-import { recordDailyActivity } from "@/lib/db";
+import { db, recordDailyActivity } from "@/lib/db";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -63,19 +63,28 @@ export function useSession() {
     }
   };
 
-  const endSession = () => {
+  const deleteSession = async () => {
     if (!isInitialized) return;
 
     try {
+      // Remove only session-related data from localStorage
       localStorage.removeItem("habistat_session");
+
+      // Clear session state
       setSession(null);
+
+      // Clear database records for the current session
+      if (session?.id) {
+        await db.appSessions.where("userId").equals(session.id).delete();
+        await db.dailyActivity.where("userId").equals(session.id).delete();
+      }
     } catch (error) {
-      console.error("Error ending session:", error);
+      console.error("Error deleting session:", error);
     }
   };
 
   // Update createSession to record initial activity
-  const createSession = () => {
+  const createSession = async () => {
     if (!isInitialized) return;
 
     try {
@@ -87,7 +96,7 @@ export function useSession() {
       localStorage.setItem("habistat_session", JSON.stringify(newSession));
       setSession(newSession);
       // Record initial daily activity
-      recordDailyActivity();
+      await recordDailyActivity();
     } catch (error) {
       console.error("Error creating session:", error);
     }
@@ -100,5 +109,5 @@ export function useSession() {
     }
   }, [session?.id]); // Only run once when component mounts
 
-  return { session, updateLastActive, endSession, createSession, isInitialized };
+  return { session, updateLastActive, deleteSession, createSession, isInitialized };
 }
