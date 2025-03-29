@@ -1,9 +1,8 @@
 "use client";
 
-import { useOnlineStatus } from "@/hooks/use-online-status";
 import { useSession } from "@/hooks/use-session";
 import { Link } from "@/i18n/routing";
-import { Bell, Menu, Search, Settings, Wifi, WifiOff, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -43,7 +42,6 @@ import {
  */
 
 export function AppHeader() {
-  const isOnline = useOnlineStatus();
   const { session, endSession } = useSession();
   const router = useRouter();
 
@@ -84,22 +82,6 @@ export function AppHeader() {
           {/* Header */}
           <div className="flex h-10 w-full items-center justify-between px-6 py-1.5">
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">Dashboard</span>
-                {isOnline ? (
-                  <Wifi className="h-4 w-4 text-green-500" />
-                ) : (
-                  <WifiOff className="h-4 w-4 text-yellow-500" />
-                )}
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button size="icon" variant="ghost">
-                <Search className="size-4" />
-              </Button>
-              <Button size="icon" variant="ghost">
-                <Bell className="size-4" />
-              </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -118,10 +100,6 @@ export function AppHeader() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                  </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={(e) => {
                       e.preventDefault();

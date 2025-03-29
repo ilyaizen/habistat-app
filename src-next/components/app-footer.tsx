@@ -7,7 +7,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useOnlineStatus } from "@/hooks/use-online-status";
 import { locales } from "@/i18n/settings";
+import { CircleAlert, CircleCheck } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,6 +31,7 @@ const languageMap = {
 } as const;
 
 export function AppFooter() {
+  const isOnline = useOnlineStatus();
   const t = useTranslations("footer");
   const pathname = usePathname();
   const locale = useLocale();
@@ -79,6 +82,17 @@ export function AppFooter() {
             >
               @ilyaizen
             </a>
+          </div>
+
+          {/* Online status indicator */}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
+              {isOnline ? (
+                <CircleCheck className="h-4 w-4 text-green-500" />
+              ) : (
+                <CircleAlert className="h-4 w-4 text-yellow-500" />
+              )}
+            </div>
           </div>
 
           {/* Social links and language switcher */}

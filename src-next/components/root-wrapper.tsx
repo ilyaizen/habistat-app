@@ -2,7 +2,6 @@
 
 import { AppFooter } from "@/components/app-footer";
 import { AppHeader } from "@/components/app-header";
-import { AppSessionTracker } from "@/components/app-session-tracker";
 import { MotionWrapper } from "@/components/motion-wrapper";
 import { AnimatePresence } from "framer-motion";
 import { ThemeProvider } from "next-themes";
@@ -32,7 +31,6 @@ export function RootWrapper({ children }: RootWrapperProps) {
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <div className="flex min-h-screen w-full flex-col">
         {/* Session tracker to record app usage with 5-minute TTL */}
-        <AppSessionTracker />
 
         {/* Application header with navigation */}
         <AppHeader />

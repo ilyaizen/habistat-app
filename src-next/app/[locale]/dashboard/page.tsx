@@ -1,6 +1,5 @@
 "use client";
 
-import { SessionInfo } from "@/components/session-info";
 import { UptimeMonitor } from "@/components/uptime-monitor";
 import { useSession } from "@/hooks/use-session";
 import { useRouter } from "next/navigation";
@@ -33,7 +32,6 @@ export default function DashboardPage() {
   return (
     <main className="container mx-auto max-w-4xl space-y-6 p-4">
       <UptimeMonitor />
-      <SessionInfo session={session} />
     </main>
   );
 }
